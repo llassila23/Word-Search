@@ -10,6 +10,8 @@ int main(){
     WordSearch newWS;
     newWS.getWords();
     newWS.print();
+    newWS.arrange(); // calls printMatrix
+
 }
 
 
