@@ -8,10 +8,15 @@
 using namespace std;
 int main(){
     WordSearch newWS;
-    newWS.getWords();
+    newWS.matrixToZero();
+    //newWS.getWords();
     newWS.print();
-    newWS.arrange(); // calls printMatrix
+    newWS.arrange();
+    newWS.randFill();
 
+    newWS.wordSearchOut();
+
+return 1;
 }
 
 
