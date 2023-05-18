@@ -15,24 +15,23 @@ class Manager {
 public:
     // constructor, value initialization of array word[]
 
-        string word[4] = {"CAR", "VOLVO", "BOAT", "BIKE"};// array that can hold four words
-        //char matrix[6][6] ;
+        string word[4] = {"car", "apple", "volvo", "bob"};// array that can hold four words
+        int matrix [10][10] = {};
+        int location[2] = {0,0};
 
 };
 
 class WordSearch : public Manager{ // inherit the arrays from manager
     public:
     int loc = 0; // int to help store location of common values
-    int m=6, n=6 ;// dimensions for matrix
-    int matrix [6][6] = {};
+    int m=10, n=10 ;// dimensions for matrix
+    int wordSize = 4;
 
-
-
-
-    void matrixToZero(){ // fill array with stars
+    
+    void matrixToZero(){ // fill array with empty spaces
         for(int i = 0; i<m; i++){
-            for (int j = 0; j <= 5; j++) {
-                matrix[i][j] = 0 ;
+            for (int j = 0; j <= n; j++) {
+                matrix[i][j] = 32; // ascii value of a empty space
             }
         }
 
@@ -48,26 +47,99 @@ class WordSearch : public Manager{ // inherit the arrays from manager
         }
 
     }
+    void newArrange() { // calls compare, meant to arrange words, references location[]
+        bool common = false; // does the next word have a common letter?
+        for (int i = 0; i < wordSize; i++) { // to get word
+                string wordOne = word[i];
+                int spacer = m - wordOne.size(); // spacer to offset from position zero
+                spacer = spacer % 2;
+            while(!common) { // if common is not true, print horizontal
+                int row = 0;
+                int letterLoc = 0; // for advancing wordOne.at
+                for (int column = 0; column < wordOne.size(); column++) {
+                    matrix[row][column + spacer] = wordOne.at(letterLoc) - 0;
+                    letterLoc++;
+                }
+                   common = compare(i, common); // search next word for common letter
+            }// end while
+
+            if (common) {// match found
+                string wordTwo = word[i+1];
+                for (int row = 0; row <= m; row++){ // to search for row location
+                    for (int column = 0; column <= n; column++) { // for loop to search for column location
+                        char cSearch = matrix[row][column]; // set char = to value
+                            if (cSearch == wordOne.at(location[0])){ // if this location = the found common letter
+                                while (row + 1 <= wordTwo.size() && location[1] < wordTwo.size()) { // print while in ranges
+                                    matrix[row][column] = wordTwo.at(location[1] ) - 0; // set that column to word Two
+                                    row += 1;  // advance row
+                                    location[1] ++; // advance the value, to traverse through the word
+                                }// end while
+                            } // end if cSearch
+                    }// end for column
+
+                }// end for row
+
+            }// end while common is found
+        }// end main for
+    } // end newArrange
+
+
+    bool compare(int i, bool common ){ // set value of location, common letter coordinates
+
+        while((i+1) <= wordSize) { // keep in bounds
+            int j = 0;
+            char cTwo = word[i + 1].at(j);
+            // want to compare first letter of second word with any letter in first word
+        for(int k = 0; k< word[i].size(); k++){
+            char cOne = word[i].at(k);
+
+            if(cOne == cTwo){
+                location[0] = k; // value of common letter in first word
+                location[1] = j; // value of common letter in second word
+                common = true;
+                return common;
+                break;
+
+                    }else{
+                        /*while(j < word[i + 1].size()) {
+                            char cTwo = word[i + 1].at(j);
+                            if(cOne == cTwo) {
+                                location[0] = k; // value of common letter in first word
+                                location[1] = j; // value of common letter in second word
+                                return true;
+                            }
+                            j++; // counter
+                    } // end while j
+                         */
+
+                }// end if else
+            } // end for k
+        } // end while word size in bounds
+        return common; // no match found
+    } // end compare method
+
 
     void arrange(){
 // j is columns, i is row
+    bool horiz = false ; // for arranging word horizontal or not
          for(int i = 0; i < 4; i++){
              string temp = word[i];
              for (int j = 0; j< temp.size(); j++){ // want to put each letter into a spot in matrix
-                 matrix[i][j] = temp.at(j) - 0; // add ascii value into matrix
+                     matrix[i][j] = temp.at(j) - 0; // add ascii value into matrix
                  //cout<< matrix[i][j] <<"";
              }
              //cout<<endl;
          }
+        //horiz = !horiz; // swap horizontal
      }// end arrange
 
 
     void randFill(){
-        srand(unsigned (1));
+        srand(unsigned (1)); // random generator, seed of 1
         //cout<< random;
         for(int i = 0; i< m; i++){
             for(int j = 0; j< n; j++){
-                if(matrix[i][j] == 0){
+                if(matrix[i][j] == 32){
                     int random = 65 + (rand() % 24); // new random number between 65 & 99
                     matrix[i][j] = random ;
                 }else{

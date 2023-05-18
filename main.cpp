@@ -10,9 +10,9 @@ int main(){
     WordSearch newWS;
     newWS.matrixToZero();
     //newWS.getWords();
-    newWS.print();
-    newWS.arrange();
-    newWS.randFill();
+   // newWS.print();
+    newWS.newArrange();
+    //newWS.randFill();
 
     newWS.wordSearchOut();
 
@@ -26,7 +26,7 @@ header file with bulk of methods
 instructions/menu
  take user input of words. start with 3
  put each word in array list (object?)
- build an 2-dimensional array, nxn of chars.
+
  arrange words in to this array
     traverse one row. if start character of a string is contained in that row. add that string
     that column
