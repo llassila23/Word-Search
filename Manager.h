@@ -15,8 +15,8 @@ class Manager {
 public:
     // constructor, value initialization of array word[]
 
-        string word[4] = {"car", "apple", "volvo", "bob"};// array that can hold four words
-        int matrix [10][10] = {};
+        string word[6] = {"car", "apple", "pizza", "bicycle", "rainbow", "dog"};// array that can hold six words
+        int matrix [12][12] = {};
         int location[2] = {0,0};
 
 };
@@ -24,7 +24,7 @@ public:
 class WordSearch : public Manager{ // inherit the arrays from manager
     public:
     int loc = 0; // int to help store location of common values
-    int m=10, n=10 ;// dimensions for matrix
+    int m=12, n=12 ;// dimensions for matrix
     int wordSize = 4;
 
     
@@ -47,9 +47,14 @@ class WordSearch : public Manager{ // inherit the arrays from manager
         }
 
     }
-    void newArrange() { // calls compare, meant to arrange words, references location[]
+    // precondition: empty matrix, first two words can be overlapped.
+    // postconditoin: matrix has 2 words arranged in it.
+    void crossArrange() { // calls compare, meant to arrange words, references location[]
+
         bool common = false; // does the next word have a common letter?
+
         for (int i = 0; i < wordSize; i++) { // to get word
+
                 string wordOne = word[i];
                 int spacer = m - wordOne.size(); // spacer to offset from position zero
                 spacer = spacer % 2;
@@ -78,8 +83,7 @@ class WordSearch : public Manager{ // inherit the arrays from manager
                     }// end for column
 
                 }// end for row
-
-            }// end while common is found
+            }// end if common is found
         }// end main for
     } // end newArrange
 
@@ -101,16 +105,6 @@ class WordSearch : public Manager{ // inherit the arrays from manager
                 break;
 
                     }else{
-                        /*while(j < word[i + 1].size()) {
-                            char cTwo = word[i + 1].at(j);
-                            if(cOne == cTwo) {
-                                location[0] = k; // value of common letter in first word
-                                location[1] = j; // value of common letter in second word
-                                return true;
-                            }
-                            j++; // counter
-                    } // end while j
-                         */
 
                 }// end if else
             } // end for k
@@ -118,20 +112,92 @@ class WordSearch : public Manager{ // inherit the arrays from manager
         return common; // no match found
     } // end compare method
 
+// precondition: word[0] & word[1] have been arranged, i = next word to be arranged
+    void arrangeHorizontal(int i){// method for horizontal arranging
+        string temp = word[i]; // word to be arranged
+        bool space = false ; //is there enough space for temp?
+        int column = 0; // column will be refernced again in filling
+        int row = 0;
+        int offset = temp.size() % i;
 
-    void arrange(){
-// j is columns, i is row
-    bool horiz = false ; // for arranging word horizontal or not
-         for(int i = 0; i < 4; i++){
-             string temp = word[i];
-             for (int j = 0; j< temp.size(); j++){ // want to put each letter into a spot in matrix
-                     matrix[i][j] = temp.at(j) - 0; // add ascii value into matrix
-                 //cout<< matrix[i][j] <<"";
-             }
-             //cout<<endl;
-         }
-        //horiz = !horiz; // swap horizontal
-     }// end arrange
+
+        // to search for empty row
+        for( row =0 ; row < m; row++){
+                while(matrix[row][column] == 32 && column+2 <= n ){
+                        if(matrix[row][column + 1] !=32 || matrix[row][column+2] !=32){ // if both not zero, chances are row is full
+                            space = space; // still false
+                            break; // exit loops
+                        } else{
+                            column++; // advance
+                            if(column == temp.size()) {
+                                space = true;
+                                break;
+                            }// end if
+
+                            // do loop again
+                        } // end if else
+
+                }// end while
+            if(space){
+                break; // catch, space found, no need to seach longer
+            }
+
+        }// end row, row var will be set if space is true
+
+
+        // print the word
+        while(space){
+            column -= temp.size(); // reset back to start of empty row space to add in the word
+            for (int k = 0; k< temp.size(); k++){
+                matrix[row+offset][column+k] = temp.at(k) - 0; // print that word in that column // 3 is offset
+            }
+        space = !space;  // exit while loop
+        } // end while space
+
+     }// end arrangeHorizontal
+
+// same as arrangeHorizontal, except row logic has been applied to columns
+    void arrangeVertical(int i){// method for horizontal arranging the 4th word
+        string temp = word[i]; // word to be arranged
+        bool space = false ; //is there enough space for temp?
+        int column = 0 ; // column will be refernced again in filling
+        int row = 0;
+            int offset = 2*i -1;
+
+        // to search for empty row
+        for( column = 0; column < m; column++){
+            while(matrix[row][column] == 32 && row+2 <= n ){
+                if(matrix[row +1][column] !=32 || matrix[row+2][column] !=32){ // if both not zero, chances are row is full
+                    space = space; // still false
+                    break; // exit loops
+                } else{
+                    row++; // advance
+                    if(row == temp.size()) {
+                        space = true;
+                        break;
+                    }// end if
+
+                    // do loop again
+                } // end if else
+
+            }// end while
+            if(space){
+                break; // catch, space found, no need to seach longer
+            }
+
+        }// end row, row var will be set if space is true
+
+
+        // print the word
+        while(space){
+            row -= temp.size(); // reset back to start of empty row space to add in the word
+            for (int k = 0; k< temp.size(); k++){
+                matrix[row+k][column + offset] = temp.at(k) - 0; // print that word in that column
+            }
+            space = !space;  // exit while loop
+        } // end while space
+
+    }// end arrange
 
 
     void randFill(){

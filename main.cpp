@@ -11,7 +11,11 @@ int main(){
     newWS.matrixToZero();
     //newWS.getWords();
    // newWS.print();
-    newWS.newArrange();
+    newWS.crossArrange();
+    newWS.arrangeHorizontal(2); // arranges 3rd word horizontally
+    newWS.arrangeVertical(3); // arranges 4th word vertically
+    newWS.arrangeHorizontal(4);
+    newWS.arrangeVertical(5);
     //newWS.randFill();
 
     newWS.wordSearchOut();
