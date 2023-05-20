@@ -5,9 +5,11 @@
 #ifndef ASSIGNMENT_1_WORD_SEARCH_MANAGER_H
 #define ASSIGNMENT_1_WORD_SEARCH_MANAGER_H
 // methods defined here
-#include <iostream>
-#include <random>
+#include <iostream> // input and output
+#include <random> // random number generation
 #include<cstdlib>
+#include <fstream> // file io
+#include <string>
 
 using namespace std;
 
@@ -15,8 +17,9 @@ class Manager {
 public:
     // constructor, value initialization of array word[]
 
-        string word[6] = {"car", "apple", "pizza", "bicycle", "rainbow", "dog"};// array that can hold six words
+        string word[6] = {};// array that can hold six words
         int matrix [12][12] = {};
+        int copy [12][12] ={}; // to be used to store solutions before matrix is filled
         int location[2] = {0,0};
 
 };
@@ -26,8 +29,26 @@ class WordSearch : public Manager{ // inherit the arrays from manager
     int loc = 0; // int to help store location of common values
     int m=12, n=12 ;// dimensions for matrix
     int wordSize = 4;
+    int spacer; // for horizontal offset
 
-    
+    void printWelcome(){
+        string line;
+        //string fileName = "WELCOME.txt";
+        //fstream file;
+        //ifstream file;
+        std:: ifstream file("WELCOME.txt");
+
+
+        if(file.is_open()){
+        while(getline (file,line))
+        {
+            cout<< line<< endl;
+        }
+        file.close();
+        }
+        else  cout<< "unable to open file" << endl;
+
+    }
     void matrixToZero(){ // fill array with empty spaces
         for(int i = 0; i<m; i++){
             for (int j = 0; j <= n; j++) {
@@ -39,14 +60,14 @@ class WordSearch : public Manager{ // inherit the arrays from manager
 
 
      void getWords(){ // method to put users word choice into word[]
-        cout<< "please enter a 2 - 6 letter word when prompted"<< endl;
-        cout<< "these will be the words in the word search"<< endl;
-        for(int i = 0; i<= 3; i++){
+        cout<< "please enter a 2-12 letter word when prompted"<< endl;
+        for(int i = 0; i<= 5; i++){
             cout<< "enter a word"<< endl;
             cin >> word[i];
         }
+        return;
+    }// end get words
 
-    }
     // precondition: empty matrix, first two words can be overlapped.
     // postconditoin: matrix has 2 words arranged in it.
     void crossArrange() { // calls compare, meant to arrange words, references location[]
@@ -56,7 +77,7 @@ class WordSearch : public Manager{ // inherit the arrays from manager
         for (int i = 0; i < wordSize; i++) { // to get word
 
                 string wordOne = word[i];
-                int spacer = m - wordOne.size(); // spacer to offset from position zero
+                 spacer = m - wordOne.size(); // spacer to offset from position zero
                 spacer = spacer % 2;
             while(!common) { // if common is not true, print horizontal
                 int row = 0;
@@ -118,9 +139,7 @@ class WordSearch : public Manager{ // inherit the arrays from manager
         bool space = false ; //is there enough space for temp?
         int column = 0; // column will be refernced again in filling
         int row = 0;
-        int offset = temp.size() % i;
-
-
+        spacer++;
         // to search for empty row
         for( row =0 ; row < m; row++){
                 while(matrix[row][column] == 32 && column+2 <= n ){
@@ -149,7 +168,7 @@ class WordSearch : public Manager{ // inherit the arrays from manager
         while(space){
             column -= temp.size(); // reset back to start of empty row space to add in the word
             for (int k = 0; k< temp.size(); k++){
-                matrix[row+offset][column+k] = temp.at(k) - 0; // print that word in that column // 3 is offset
+                matrix[row+spacer][column+spacer+k] = temp.at(k) - 0; // print that word in that column // 3 is offset
             }
         space = !space;  // exit while loop
         } // end while space
@@ -160,12 +179,12 @@ class WordSearch : public Manager{ // inherit the arrays from manager
     void arrangeVertical(int i){// method for horizontal arranging the 4th word
         string temp = word[i]; // word to be arranged
         bool space = false ; //is there enough space for temp?
-        int column = 0 ; // column will be refernced again in filling
+        int column = m ; // column will be refernced again in filling
         int row = 0;
             int offset = 2*i -1;
 
         // to search for empty row
-        for( column = 0; column < m; column++){
+        for( column = m; column > 0; column--){ // go backwards
             while(matrix[row][column] == 32 && row+2 <= n ){
                 if(matrix[row +1][column] !=32 || matrix[row+2][column] !=32){ // if both not zero, chances are row is full
                     space = space; // still false
@@ -199,6 +218,14 @@ class WordSearch : public Manager{ // inherit the arrays from manager
 
     }// end arrange
 
+    void copyWS(){
+        for (int i = 0; i < m; i++){
+            for (int j =0; j<n ; j++) {
+                copy[i][j] = matrix[i][j]; // set them equal
+            }
+        }
+    }// end copyWS
+
 
     void randFill(){
         srand(unsigned (1)); // random generator, seed of 1
@@ -224,14 +251,17 @@ class WordSearch : public Manager{ // inherit the arrays from manager
                 }
                 cout <<endl;
             }
-    }// end print Matrix
+    }// end WS out
 
-    void print(){ // method to test word[] by printing it to console
-        for(string val : word){
-            cout<< val << endl;
+    void copyOut(){ // print solutions
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                char ch = copy[i][j];
+                cout << ch ;
+            }
+            cout <<endl;
         }
-
-    }
+    }// end copy out
 
 
 
