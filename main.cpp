@@ -28,10 +28,10 @@ int main(){
     do{
     cout<< "Enter 1 to see The Word Search"<< endl;
     cout<< "2 to see the solutions"<< endl;
-    cout<< "3 to exit"<< endl;
+    cout<< "else, exit"<< endl;
     cin>>choice;
 
-    switch(choice){
+    switch(choice){ // display/exit menu
         case 1:
             newWS.randFill();
             newWS.wordSearchOut();
@@ -39,14 +39,26 @@ int main(){
         case 2:
             newWS.copyOut(); // print solutions
             break;
-        case 3:
+        default:
             cout<< "goodbye";
             break;
     }// end switch
-        }while(choice == 1 || choice == 2 && choice != 3 );
-
-
+        }while(choice == 1 || choice == 2 );
 
 return 0;
-}
+}// end main
 
+/*Note:
+ * This program is not very robust thus, I would like to include an acknowledgement of things I would do
+ *  differently in the future.
+ * 1. It is difficult to accept all the words at once. Arranging them with overlap would be easier to
+ *  accomplish should all the words be handled individually as the user enters them
+ *  and then seeing if any match.
+ * 2. There is a lot of repetition in the printing and traversing of the arrays.
+ *  It would be better to pass the different arrays into a single, more flexible method.
+ * 3. Number 2 would also allow for a more universal coordinate system. This would allow easier
+ *  locating of spaces and transferring the location of that space to the arrangement methods.
+ * 4. File IO could be useful for storing the word searches once they have been made, freeing up
+ *  resources.
+ *  This would also allow for a library of past word searches which would be a neat feature.
+ * */

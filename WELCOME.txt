@@ -1,7 +1,7 @@
 This is the Word Search Program
-When prompted please enter 6 words that are less than 12 letters long.\
-If the first and second word have a common letter (ex. "car" and "apple")\
-they will be printed in a cross.\
-Then you may choose:\
-1  view the word search\
-2  view the solution}
+When prompted please enter 6 words that are less than 12 letters long.
+If the first and second word have a common letter (ex. "car" and "apple")
+they will be printed in a cross.
+Then you may choose:
+1  view the word search
+2  view the solution

@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class Manager {
+class Manager { // parent class contains arrays
 public:
     // constructor, value initialization of array word[]
 
@@ -31,14 +31,11 @@ class WordSearch : public Manager{ // inherit the arrays from manager
     int wordSize = 4;
     int spacer; // for horizontal offset
 
+    // Note, Use full file path
+    // print the instructions
     void printWelcome(){
         string line;
-        //string fileName = "WELCOME.txt";
-        //fstream file;
-        //ifstream file;
-        std:: ifstream file("WELCOME.txt");
-
-
+        ifstream file("/Users/lucaslassila/Downloads/145 Code/Assignment 1 Word Search/WELCOME.txt");
         if(file.is_open()){
         while(getline (file,line))
         {
@@ -47,7 +44,6 @@ class WordSearch : public Manager{ // inherit the arrays from manager
         file.close();
         }
         else  cout<< "unable to open file" << endl;
-
     }
     void matrixToZero(){ // fill array with empty spaces
         for(int i = 0; i<m; i++){
@@ -109,7 +105,7 @@ class WordSearch : public Manager{ // inherit the arrays from manager
     } // end newArrange
 
 
-    bool compare(int i, bool common ){ // set value of location, common letter coordinates
+    bool compare(int i, bool common ){ // set value of location-> coordinates of common letter
 
         while((i+1) <= wordSize) { // keep in bounds
             int j = 0;
@@ -164,7 +160,7 @@ class WordSearch : public Manager{ // inherit the arrays from manager
         }// end row, row var will be set if space is true
 
 
-        // print the word
+        // print the word to the matrix
         while(space){
             column -= temp.size(); // reset back to start of empty row space to add in the word
             for (int k = 0; k< temp.size(); k++){
@@ -207,7 +203,7 @@ class WordSearch : public Manager{ // inherit the arrays from manager
         }// end row, row var will be set if space is true
 
 
-        // print the word
+        // print the word to the matrix
         while(space){
             row -= temp.size(); // reset back to start of empty row space to add in the word
             for (int k = 0; k< temp.size(); k++){
@@ -218,7 +214,7 @@ class WordSearch : public Manager{ // inherit the arrays from manager
 
     }// end arrange
 
-    void copyWS(){
+    void copyWS(){// save solution set
         for (int i = 0; i < m; i++){
             for (int j =0; j<n ; j++) {
                 copy[i][j] = matrix[i][j]; // set them equal
@@ -227,7 +223,7 @@ class WordSearch : public Manager{ // inherit the arrays from manager
     }// end copyWS
 
 
-    void randFill(){
+    void randFill(){ // fill in with random numbers
         srand(unsigned (1)); // random generator, seed of 1
         //cout<< random;
         for(int i = 0; i< m; i++){
@@ -243,7 +239,7 @@ class WordSearch : public Manager{ // inherit the arrays from manager
         }// end outer for
     }// end rand fill
 
-     void wordSearchOut(){
+     void wordSearchOut(){ // print completed wordsearch
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 char ch = matrix[i][j];
